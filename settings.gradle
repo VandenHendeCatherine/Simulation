@@ -1,0 +1,4 @@
+rootProject.name = 'Simulation'
+include 'Simulation.View'
+include 'Web-Server'
+
