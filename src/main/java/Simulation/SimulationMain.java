@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SimulationMain { ;
 
-	public static void main(String[] args){
+	public static void main(String[] args) throws InterruptedException {
 
 		List<Fire> fires = new ArrayList<>();
 		AlertGenerator alertGenerator = new AlertGenerator();
@@ -26,11 +26,17 @@ public class SimulationMain { ;
 
 		//test iot
 		List<Sensor> sensors = new ArrayList<>();
-		sensors.add(new Sensor(52, 4));
-		sensors.add(new Sensor(27, 9));
-		sensors.add(new Sensor(60, 9));
-		SerialPortCommunication serialPortCommunication = new SerialPortCommunication();
-		serialPortCommunication.sendSensorIntensityToComm(sensors);
-		serialPortCommunication.closeCommunication();
+
+			sensors.add(new Sensor(1, 1));
+			sensors.add(new Sensor(2, 1));
+			sensors.add(new Sensor(3, 1));
+			sensors.add(new Sensor(4, 1));
+
+			System.out.println(sensors);
+			SerialPortCommunication serialPortCommunication = new SerialPortCommunication();
+			serialPortCommunication.sendSensorIntensityToComm(sensors);
+			serialPortCommunication.closeCommunication();
+			sensors.clear();
+
 	}
 }

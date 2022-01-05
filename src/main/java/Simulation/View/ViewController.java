@@ -22,6 +22,8 @@ public class ViewController {
 	public ViewController(List<Fire> fire, List<Sensor> sensors) throws IOException {
 		this.fire = fire;
 		this.sensors = sensors;
+
+
 		URL url = new URL("localhost");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");

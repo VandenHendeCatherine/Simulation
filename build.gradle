@@ -13,8 +13,8 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:5.6.0.Final'
     implementation 'com.fazecast:jSerialComm:2.7.0'
     implementation 'commons-codec:commons-codec:1.15'
-    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 test {

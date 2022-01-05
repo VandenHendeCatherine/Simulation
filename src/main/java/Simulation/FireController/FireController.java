@@ -2,7 +2,6 @@ package Simulation.FireController;
 
 import Simulation.View.ViewController;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

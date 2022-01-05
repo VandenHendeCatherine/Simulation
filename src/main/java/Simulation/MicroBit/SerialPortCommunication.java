@@ -3,9 +3,11 @@ package Simulation.MicroBit;
 import Simulation.FireController.Sensor;
 import com.fazecast.jSerialComm.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -43,12 +45,14 @@ public class SerialPortCommunication {
 		String command = String.join(", ", sensorsToString);
 
 		//secure data
+
 		byte[] encodedData = Base64.getEncoder().encode(command.getBytes());
 		byte[] endOfLine = "\r\n".getBytes();
-		byte[] message = new byte[endOfLine.length + encodedData.length];
-		System.arraycopy(encodedData, 0,message, 0, encodedData.length );
-		System.arraycopy(endOfLine, 0,message, encodedData.length , endOfLine.length );
-
+		byte[] message = new byte[endOfLine.length + encodedData.length ];
+		System.arraycopy(encodedData, 0,message,0, encodedData.length);
+		System.arraycopy(endOfLine, 0,message, encodedData.length , endOfLine.length);
+System.out.println(new String(encodedData, StandardCharsets.UTF_8));
+		System.out.println(new String(message, StandardCharsets.UTF_8));
 		//send data
 		serialPort.writeBytes(message, message.length);
 	}

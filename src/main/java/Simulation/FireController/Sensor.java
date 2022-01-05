@@ -64,6 +64,6 @@ public class Sensor {
 	}*/
 
 	public String toString(){
-		return id + "-" + intensity;
+		return id*4.5 + "-" + intensity*3;
 	}
 }
