@@ -24,7 +24,8 @@ public class ViewController {
 		this.sensors = sensors;
 
 
-		URL url = new URL("localhost");
+		//connexion Yohan
+		URL url = new URL("localhost/sdfghjk");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		Map<String, String> parameters = new HashMap<>();
