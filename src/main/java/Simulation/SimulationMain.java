@@ -22,9 +22,6 @@ public class SimulationMain { ;
 			fires.add(alertGenerator.generate());
 			i++;
 		}
-		ViewController viewController = new ViewController(fires, null);
-		viewController.setFire(fires);
-		System.out.println(fires);
 
 		//test iot
 		List<Sensor> sensors = new ArrayList<>();
@@ -34,6 +31,10 @@ public class SimulationMain { ;
 			sensors.add(new Sensor(3, 1));
 			sensors.add(new Sensor(4, 1));
 
+
+		ViewController viewController = new ViewController(fires, sensors);
+		viewController.setFire(fires);
+		System.out.println(fires);
 		JSONObject jsonObject = viewController.buildJSonSensors(sensors);
 		System.out.println(jsonObject);
 

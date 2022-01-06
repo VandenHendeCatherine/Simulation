@@ -34,10 +34,14 @@ public class ViewController {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestMethod("GET");
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put("param1", this.fire.toString());
+		JSONObject jsonObject = buildJSonSensors(this.sensors);
+		parameters.put("param1", jsonObject.toString());
+		//Object object = jsonObject.getJSONObject("capteurs");
+		//System.out.println(object);
 
 		con.setDoOutput(true);
 		DataOutputStream out = new DataOutputStream(con.getOutputStream());
+		System.out.println(ParameterStringBuilder.getParamsString(parameters));
 		out.writeBytes(ParameterStringBuilder.getParamsString(parameters));
 		out.flush();
 		out.close();
