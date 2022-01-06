@@ -5,13 +5,15 @@ import Simulation.FireController.Fire;
 import Simulation.FireController.Sensor;
 import Simulation.MicroBit.SerialPortCommunication;
 import Simulation.View.ViewController;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationMain { ;
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException {
 
 		List<Fire> fires = new ArrayList<>();
 		AlertGenerator alertGenerator = new AlertGenerator();
@@ -20,7 +22,7 @@ public class SimulationMain { ;
 			fires.add(alertGenerator.generate());
 			i++;
 		}
-		ViewController viewController = new ViewController();
+		ViewController viewController = new ViewController(fires, null);
 		viewController.setFire(fires);
 		System.out.println(fires);
 
@@ -32,7 +34,9 @@ public class SimulationMain { ;
 			sensors.add(new Sensor(3, 1));
 			sensors.add(new Sensor(4, 1));
 
-			System.out.println(sensors);
+		JSONObject jsonObject = viewController.buildJSonSensors(sensors);
+		System.out.println(jsonObject);
+
 			SerialPortCommunication serialPortCommunication = new SerialPortCommunication();
 			serialPortCommunication.sendSensorIntensityToComm(sensors);
 			serialPortCommunication.closeCommunication();

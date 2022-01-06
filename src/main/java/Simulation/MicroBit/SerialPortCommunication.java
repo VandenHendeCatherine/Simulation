@@ -51,8 +51,7 @@ public class SerialPortCommunication {
 		byte[] message = new byte[endOfLine.length + encodedData.length ];
 		System.arraycopy(encodedData, 0,message,0, encodedData.length);
 		System.arraycopy(endOfLine, 0,message, encodedData.length , endOfLine.length);
-System.out.println(new String(encodedData, StandardCharsets.UTF_8));
-		System.out.println(new String(message, StandardCharsets.UTF_8));
+
 		//send data
 		serialPort.writeBytes(message, message.length);
 	}
