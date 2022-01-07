@@ -34,10 +34,10 @@ public class SimulationMain { ;
 		//test iot
 		List<Sensor> sensors = new ArrayList<>();
 
-			sensors.add(new Sensor(18, 6));
-			sensors.add(new Sensor(2, 1));
-			sensors.add(new Sensor(3, 1));
-			sensors.add(new Sensor(4, 1));
+			sensors.add(new Sensor(40, 6));
+			sensors.add(new Sensor(5, 4));
+			sensors.add(new Sensor(56, 8));
+			sensors.add(new Sensor(37, 3));
 
 
 		ViewController viewController = new ViewController(fires, sensors);
@@ -52,7 +52,7 @@ public class SimulationMain { ;
 			sensors.clear();
 
 		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-		server.createContext("/test", new CustomHandler(jsonObject.toString()));
+		server.createContext("/getCapteurs", new CustomHandler(jsonObject.toString()));
 		server.start();
 		/*PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
 		File file = new File(path);
