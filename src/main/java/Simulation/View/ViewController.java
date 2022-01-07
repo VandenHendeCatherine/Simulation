@@ -2,13 +2,11 @@ package Simulation.View;
 
 import Simulation.FireController.Fire;
 import Simulation.FireController.Sensor;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -23,7 +21,7 @@ public class ViewController {
 	public ViewController(){
 
 	}
-	public ViewController(List<Fire> fire, List<Sensor> sensors) throws IOException {
+	public ViewController(List<Fire> fire, List<Sensor> sensors) throws IOException, ParseException {
 		this.fire = fire;
 		this.sensors = sensors;
 
@@ -36,8 +34,6 @@ public class ViewController {
 		Map<String, String> parameters = new HashMap<>();
 		JSONObject jsonObject = buildJSonSensors(this.sensors);
 		parameters.put("param1", jsonObject.toString());
-		//Object object = jsonObject.getJSONObject("capteurs");
-		//System.out.println(object);
 
 		con.setDoOutput(true);
 		DataOutputStream out = new DataOutputStream(con.getOutputStream());
@@ -51,15 +47,7 @@ public class ViewController {
 		con.setConnectTimeout(5000);
 		con.setReadTimeout(5000);
 		int status = con.getResponseCode();
-		/*BufferedReader in = new BufferedReader(
-				new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer content = new StringBuffer();
-		while ((inputLine = in.readLine()) != null) {
-			content.append(inputLine);
-		}
-		System.out.println(content);
-		in.close();*/
+		System.out.println(status);
 		con.disconnect();
 
 	}
@@ -99,7 +87,7 @@ public class ViewController {
 		return "ViewController :" + "fire=" + fire + ", sensors=" + sensors + '}';
 	}
 
-	public JSONObject buildJSonSensors(List<Sensor> sensors){
+	public JSONObject buildJSonSensors(List<Sensor> sensors) throws ParseException {
 		JSONObject jsonObject = new JSONObject();
 		for(Sensor sensor: sensors){
 			JSONObject sensorJSon = new JSONObject();
@@ -107,6 +95,7 @@ public class ViewController {
 			sensorJSon.put("id", sensor.getId());
 			jsonObject.append("capteurs", sensorJSon);
 		}
+		JSonUtils.readJSonSensor(jsonObject);
 		return jsonObject ;
 	}
 }
