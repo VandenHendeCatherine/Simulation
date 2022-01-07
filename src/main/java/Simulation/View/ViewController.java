@@ -27,7 +27,7 @@ public class ViewController {
 
 
 		//connexion View
-		URL url = new URL("http://localhost:4200/");
+		/*URL url = new URL("http://localhost:4200/");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestMethod("GET");
@@ -48,7 +48,7 @@ public class ViewController {
 		con.setReadTimeout(5000);
 		int status = con.getResponseCode();
 		System.out.println(status);
-		con.disconnect();
+		con.disconnect();*/
 
 	}
 
