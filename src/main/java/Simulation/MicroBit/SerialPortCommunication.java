@@ -3,11 +3,9 @@ package Simulation.MicroBit;
 import Simulation.FireController.Sensor;
 import com.fazecast.jSerialComm.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**

@@ -3,6 +3,9 @@ package Simulation.View;
 import Simulation.FireController.Sensor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
+
+import java.util.List;
 
 public class JSonUtils {
 
@@ -24,5 +27,16 @@ public class JSonUtils {
 			return newSensor;
 		}
 
+	public static JSONObject buildJSonSensors(List<Sensor> sensors)  {
+		JSONObject jsonObject = new JSONObject();
+		for(Sensor sensor: sensors){
+			JSONObject sensorJSon = new JSONObject();
+			sensorJSon.put("intensity", sensor.getIntensity());
+			sensorJSon.put("id", sensor.getId());
+			jsonObject.append("capteurs", sensorJSon);
+		}
+		JSonUtils.readJSonSensor(jsonObject);
+		return jsonObject ;
+	}
 	}
 
