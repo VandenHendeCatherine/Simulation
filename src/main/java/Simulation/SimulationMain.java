@@ -8,6 +8,9 @@ import Simulation.View.CustomHandler;
 import Simulation.View.JSonUtils;
 import Simulation.View.ViewController;
 import com.sun.net.httpserver.HttpServer;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 
@@ -19,6 +22,19 @@ import java.util.List;
 public class SimulationMain { ;
 
 	public static void main(String[] args) throws  IOException{
+		Configuration config = new Configuration();
+		config.addClass(Sensor.class);
+		SessionFactory sessionFactory = config.buildSessionFactory();
+		Session session = sessionFactory.openSession();
+
+		try {
+			Sensor personne = session.load(Sensor.class, 40);
+			System.out.println("id = " + personne.getId());
+		} finally {
+			session.close();
+		}
+
+		sessionFactory.close();
 
 		List<Fire> fires = new ArrayList<>();
 		AlertGenerator alertGenerator = new AlertGenerator();

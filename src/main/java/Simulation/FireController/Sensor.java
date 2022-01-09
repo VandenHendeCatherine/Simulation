@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Sensor {
 
 	@GeneratedValue
-	@Column(name = "idSensor")
+	@Column(name = "id")
 	@Id
 	private int id;
 
@@ -15,6 +15,8 @@ public class Sensor {
 
 	@Column(name="positionYCapteur")
 	private double positionY;
+
+	@Column(name="intensity")
 	private int intensity;
 
 	public Sensor() {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="fbd909de-b050-4cee-8e4d-5bc2ab7b4920" name="Simulation" url="jdbc:mariadb://localhost:30306/Simulation?useSSL=false&amp;allowMultiQueries=true&amp;serverTimezone=UTC" driverClass="org.mariadb.jdbc.Driver" />
+    </data-sources>
+  </component>
+</project>

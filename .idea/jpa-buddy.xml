@@ -2,5 +2,7 @@
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig">
     <option name="defaultUnitInitialized" value="true" />
+    <option name="reverseEngineeringLastDbConnectionId" value="fbd909de-b050-4cee-8e4d-5bc2ab7b4920" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/Simulation/FireController" />
   </component>
 </project>
