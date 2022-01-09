@@ -3,6 +3,7 @@ package Simulation.FireController;
 import Simulation.View.ViewController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -15,26 +16,42 @@ public class FireController {
 	private ViewController viewController;
 	private int maxIntensity = 9;
 
+	public FireController(List<Sensor> sensors, ViewController viewController){
+		this.sensors = sensors;
+		this.viewController = viewController;
+	}
 	/**
 	 *
 	 * @return Fire created
 	 */
-	public Fire calculatePositionFire(){
-		attributeNewIntensity();
-		getHigherSensors(sensors);
+	public Fire calculatePositionFire(List<Sensor> sensors){
+		//attributeNewIntensity(sensors);
+		//getHigherSensors(sensors);
 
-		return new Fire();
+		double randomX = sensors.get(0).getPositionX();
+		double randomY = sensors.get(0).getPositionY();
+		int randomIntensity = new Random().nextInt(maxIntensity + 1);
+		Date date = new Date();
+
+		return new Fire(date, randomX, randomY, randomIntensity);
+
+
 	}
 
 	/**
 	 * attribute the new intensity of each sensor from the view
 	 */
-	private void attributeNewIntensity() {
+	private void attributeNewIntensity(List<Sensor> sensors) {
 		List<Sensor> newSensorList = new ArrayList<>();
-		int[] sensorsIntensity = viewController.getSensorsIntensity();
-		for(int i = 0; i < sensors.size(); i++){
-			Sensor sensor = sensors.get(i);
-			sensor.setIntensity(sensorsIntensity[i]);
+		for(int i = 0; i < this.sensors.size(); i++){
+			Sensor sensor = this.sensors.get(i);
+			for(Sensor sensor1 : sensors){
+				if(sensor.getId() == sensor1.getId()){
+
+					sensor.setIntensity(sensor1.getIntensity());
+				}
+			}
+
 			newSensorList.add(sensor);
 		}
 		sensors = newSensorList;

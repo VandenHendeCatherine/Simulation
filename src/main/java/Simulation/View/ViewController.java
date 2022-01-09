@@ -9,7 +9,7 @@ public class ViewController {
 
 	private List<Fire> fire;
 	private List<Sensor> sensors;
-	private int[] sensorsIntensity;
+	private int[] sensorsIntensity = new int[60];
 
 	public ViewController(){
 
@@ -17,7 +17,9 @@ public class ViewController {
 	public ViewController(List<Fire> fire, List<Sensor> sensors){
 		this.fire = fire;
 		this.sensors = sensors;
-
+		for(int i = 0; i < sensors.size(); i++){
+			sensorsIntensity[i] = sensors.get(i).getIntensity();
+		}
 	}
 
 	public int[] getSensorsIntensity() {

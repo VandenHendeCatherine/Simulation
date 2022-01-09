@@ -2,17 +2,15 @@ package Simulation;
 
 import Simulation.FireController.AlertGenerator;
 import Simulation.FireController.Fire;
+import Simulation.FireController.FireController;
 import Simulation.FireController.Sensor;
 import Simulation.MicroBit.SerialPortCommunication;
-import Simulation.View.CustomHandler;
+import Simulation.View.getSensors;
 import Simulation.View.JSonUtils;
 import Simulation.View.ViewController;
+import Simulation.View.postSensors;
 import com.sun.net.httpserver.HttpServer;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.json.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -22,7 +20,7 @@ import java.util.List;
 public class SimulationMain { ;
 
 	public static void main(String[] args) throws  IOException{
-		Configuration config = new Configuration();
+		/*Configuration config = new Configuration();
 		config.addClass(Sensor.class);
 		SessionFactory sessionFactory = config.buildSessionFactory();
 		Session session = sessionFactory.openSession();
@@ -35,7 +33,7 @@ public class SimulationMain { ;
 		}
 
 		sessionFactory.close();
-
+*/
 		List<Fire> fires = new ArrayList<>();
 		AlertGenerator alertGenerator = new AlertGenerator();
 		int i = 0;
@@ -55,18 +53,23 @@ public class SimulationMain { ;
 
 		ViewController viewController = new ViewController(fires, sensors);
 		viewController.setFire(fires);
-		System.out.println(fires);
+		System.out.println("Feu : "+ fires);
 		JSONObject jsonObject = JSonUtils.buildJSonSensors(sensors);
-		System.out.println(jsonObject);
+		System.out.println("Json : " +jsonObject);
 
 			SerialPortCommunication serialPortCommunication = new SerialPortCommunication();
 			serialPortCommunication.sendSensorIntensityToComm(sensors);
 			serialPortCommunication.closeCommunication();
 			sensors.clear();
 
+		FireController fireController = new FireController(sensors, viewController);
 		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-		server.createContext("/getCapteurs", new CustomHandler(jsonObject.toString()));
+		server.createContext("/getCapteurs", new getSensors(jsonObject.toString()));
+		server.createContext("/postCapteurs", new postSensors(fireController));
 		server.start();
+		/*HttpServer serverSendCapteurs = HttpServer.create(new InetSocketAddress(8000), 0);
+		serverSendCapteurs.createContext("/postCapteurs", new CustomHandler(jsonObject.toString()));
+		serverSendCapteurs.start();*/
 
 	}
 }
