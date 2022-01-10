@@ -1,6 +1,6 @@
 package Simulation.MicroBit;
 
-import Simulation.FireController.Sensor;
+import Simulation.FireController.Capteur;
 import com.fazecast.jSerialComm.*;
 
 import java.util.Base64;
@@ -35,7 +35,7 @@ public class SerialPortCommunication {
 	 * prepare and send the message with the sensor id and their intensity via SerialPort
 	 * @param sensors
 	 */
-	public void sendSensorIntensityToComm(List<Sensor> sensors) {
+	public void sendSensorIntensityToComm(List<Capteur> sensors) {
 		//Array to String
 		List<String> sensorsToString = sensors.stream()
 		                                   .map(object -> Objects.toString(object, null))

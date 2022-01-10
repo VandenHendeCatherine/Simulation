@@ -11,25 +11,61 @@ public class FireController {
 
 	private AlertGenerator alertGenerator;
 	private List<Fire> fires;
-	private List<Sensor> sensors;
+	private List<Capteur> sensors;
 	private Fire currentFire;
 	private ViewController viewController;
 	private int maxIntensity = 9;
 
-	public FireController(List<Sensor> sensors, ViewController viewController){
+	public FireController(){
+
+	}
+	public FireController(List<Capteur> sensors, ViewController viewController){
 		this.sensors = sensors;
 		this.viewController = viewController;
 	}
+
+	public List<Fire> getFires() {
+		return fires;
+	}
+
+	public void setFires(List<Fire> fires) {
+		this.fires = fires;
+	}
+
+	public List<Capteur> getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(List<Capteur> sensors) {
+		this.sensors = sensors;
+	}
+
+	public Fire getCurrentFire() {
+		return currentFire;
+	}
+
+	public void setCurrentFire(Fire currentFire) {
+		this.currentFire = currentFire;
+	}
+
+	public ViewController getViewController() {
+		return viewController;
+	}
+
+	public void setViewController(ViewController viewController) {
+		this.viewController = viewController;
+	}
+
 	/**
 	 *
 	 * @return Fire created
 	 */
-	public Fire calculatePositionFire(List<Sensor> sensors){
+	public Fire calculatePositionFire(List<Capteur> sensors){
 		//attributeNewIntensity(sensors);
 		//getHigherSensors(sensors);
 
-		double randomX = sensors.get(0).getPositionX();
-		double randomY = sensors.get(0).getPositionY();
+		double randomX = sensors.get(0).getX();
+		double randomY = sensors.get(0).getY();
 		int randomIntensity = new Random().nextInt(maxIntensity + 1);
 		Date date = new Date();
 
@@ -41,29 +77,30 @@ public class FireController {
 	/**
 	 * attribute the new intensity of each sensor from the view
 	 */
-	private void attributeNewIntensity(List<Sensor> sensors) {
-		List<Sensor> newSensorList = new ArrayList<>();
+	public List<Capteur> attributeNewIntensity(List<Capteur> sensors) {
+		List<Capteur> newSensorList = new ArrayList<>();
 		for(int i = 0; i < this.sensors.size(); i++){
-			Sensor sensor = this.sensors.get(i);
-			for(Sensor sensor1 : sensors){
+			Capteur sensor = this.sensors.get(i);
+			for(Capteur sensor1 : sensors){
 				if(sensor.getId() == sensor1.getId()){
-
-					sensor.setIntensity(sensor1.getIntensity());
+					sensor1.setX(sensor.getX());
+					sensor1.setY(sensor.getY());
+					this.sensors.get(i).setIntensity(sensor1.getIntensity());
 				}
 			}
 
 			newSensorList.add(sensor);
 		}
-		sensors = newSensorList;
+		return newSensorList;
 	}
 
 	/**
 	 * Return the 3 Sensors with the highest Intensity
 	 * @param sensorList
 	 */
-	private void getHigherSensors(List<Sensor> sensorList) {
+	private void getHigherSensors(List<Capteur> sensorList) {
 		for(int j = 0; j<3; j++){
-			Sensor maxSensor = sensorList.get(0);
+			Capteur maxSensor = sensorList.get(0);
 			for(int i = 1; i< sensorList.size(); i++){
 				if(maxSensor.getIntensity() < sensorList.get(i).getIntensity()){
 					maxSensor = sensorList.get(i);
@@ -79,15 +116,17 @@ public class FireController {
 	 * @param fire
 	 * @return
 	 */
-	public List<Sensor> calculatePositionSensor(Fire fire){
+	public List<Capteur> calculatePositionSensor(Fire fire){
 		currentFire=fire;
-		List<Sensor> sensorList = new ArrayList<>();
-		for(Sensor sensor : sensors){
-			if((Math.abs(currentFire.getPositionX() - sensor.getPositionX()) <= 0.1) && (Math.abs(currentFire.getPositionY() - sensor.getPositionY()) <= 0.2)){
+		List<Capteur> sensorList = new ArrayList<>();
+		for(Capteur sensor : sensors){
+			double x = Math.abs(currentFire.getPositionXFeu() - sensor.getX());
+			double y = Math.abs(currentFire.getPositionYFeu() - sensor.getY());
+			if((x <= 0.02 ) && ( y <= 0.01)){
 				sensorList.add(sensor);
 			}
 		}
-		for(Sensor sensor : sensorList){
+		for(Capteur sensor : sensorList){
 			int randomIntensity = new Random().nextInt(maxIntensity + 1);
 			sensor.setIntensity(randomIntensity);
 		}

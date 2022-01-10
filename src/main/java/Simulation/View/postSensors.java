@@ -2,19 +2,18 @@ package Simulation.View;
 
 import Simulation.FireController.Fire;
 import Simulation.FireController.FireController;
-import Simulation.FireController.Sensor;
+import Simulation.FireController.Capteur;
 import com.sun.net.httpserver.*;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class postSensors implements HttpHandler {
-	//private List<Sensor> sensorsList;
+	//private List<Capteur> sensorsList;
 	private FireController fireController;
 
 	public postSensors(FireController fireController){
@@ -35,17 +34,19 @@ public class postSensors implements HttpHandler {
 			buf.append((char) b);
 		}
 		System.out.println(buf);
-		Sensor sensor = new Sensor();
+		Capteur sensor = new Capteur();
 		try {
 			sensor = JSonUtils.readJSonSensor(buf.toString());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		List<Sensor> sensorList =new ArrayList<>();
+		List<Capteur> sensorList =new ArrayList<>();
 		sensorList.add(sensor);
 		System.out.println(sensor);
+		sensorList = fireController.attributeNewIntensity(sensorList);
 		Fire fire  = fireController.calculatePositionFire(sensorList);
-		System.out.println("Feu : " + fire);
+		fire.setPositionXFeu(4.85);
+		fire.setPositionYFeu(45.5);
 		JSONObject jsonObject = JSonUtils.buildJSonFire(fire);
 		String response = jsonObject.toString();
 		System.out.println(response);

@@ -16,6 +16,10 @@ public class getSensors implements HttpHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		//send sensors
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+
 		exchange.sendResponseHeaders(200, sensorsList.length());
 		System.out.println(exchange.getRequestHeaders());
 		OutputStream os = exchange.getResponseBody();

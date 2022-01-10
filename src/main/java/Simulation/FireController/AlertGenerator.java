@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.Random;
 
 public class AlertGenerator {
-	private double minPositionX = 45.71;
-	private double maxPositionX = 45.8;
-	private double minPositionY = 4.8;
-	private double maxPositionY = 4.9;
+	private double minPositionY = 45.71;
+	private double maxPositionY = 45.8;
+	private double minPositionX = 4.8;
+	private double maxPositionX = 4.9;
 	private int maxIntensity = 9;
 	public AlertGenerator(){
 

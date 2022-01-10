@@ -1,0 +1,14 @@
+<?xml version="1.0"?><!DOCTYPE hibernate-mapping
+        PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"><hibernate-mapping>
+    <class name="Simulation.FireController.Fire" table="feu">
+        <id name="id" type="Integer" column="idFeu">
+            <generator class="native"/>
+        </id>
+        <property name="positionXFeu" type="Double" >  <column name="positionXFeu" /></property>
+        <property name="positionYFeu" type="Double"  > <column name="positionYFeu" /></property>
+        <property name="intensity" type="Integer" > <column name="intensity" /></property>
+        <property name="heureAlerte" type="Instant" > <column name="heureAlerte" /></property>
+        <property name="dateAlerte" type="LocalDate" > <column name="dateAlerte" /></property>
+    </class>
+</hibernate-mapping>

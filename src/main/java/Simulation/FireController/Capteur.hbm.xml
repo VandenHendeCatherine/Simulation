@@ -1,0 +1,12 @@
+<?xml version="1.0"?><!DOCTYPE hibernate-mapping
+        PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"><hibernate-mapping>
+    <class name="Simulation.FireController.Capteur" table="capteur">
+        <id name="id" type="Integer" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="positionX" type="numeric(4,2)" not-null="true">  <column name="x" /></property>
+        <property name="positionY" type="numeric(5,2)" not-null="true" > <column name="y" /></property>
+        <property name="intensity" type="Integer" not-null="true"> <column name="intensity" /></property>
+    </class>
+</hibernate-mapping>

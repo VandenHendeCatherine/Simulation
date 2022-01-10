@@ -1,20 +1,21 @@
 package Simulation.View;
 
+import Simulation.FireController.Capteur;
 import Simulation.FireController.Fire;
-import Simulation.FireController.Sensor;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ViewController {
 
 	private List<Fire> fire;
-	private List<Sensor> sensors;
+	private List<Capteur> sensors;
 	private int[] sensorsIntensity = new int[60];
 
 	public ViewController(){
 
 	}
-	public ViewController(List<Fire> fire, List<Sensor> sensors){
+	public ViewController(List<Fire> fire, List<Capteur> sensors){
 		this.fire = fire;
 		this.sensors = sensors;
 		for(int i = 0; i < sensors.size(); i++){

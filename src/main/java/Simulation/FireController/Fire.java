@@ -1,96 +1,97 @@
 package Simulation.FireController;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Time;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Table(name = "Feu")
+@Table(name = "feu")
 public class Fire {
-
-	@GeneratedValue
-	@Column(name = "idFeu")
 	@Id
-	private int id;
+	@Column(name = "idFeu",
+	        nullable = false)
+	private Integer id;
 
-	@Column(name = "dateFeu")
-	private java.sql.Date day;
+	@Column(name = "heureAlerte")
+	private Instant heureAlerte;
 
-	@Column(name="heureFeu")
-	private java.sql.Time hour;
+	@Column(name = "dateAlerte")
+	private LocalDate dateAlerte;
 
-	private Date date;
-	@Column(name="positionXFeu")
-	private double positionX;
+	@Column(name = "positionXFeu")
+	private Double positionXFeu;
 
-	@Column(name="positionYFeu")
-	private double positionY;
+	@Column(name = "positionYFeu")
+	private Double positionYFeu;
 
-	@Column(name="intensiteMax")
-	private int intensityMax;
+	@Column(name = "intensiteMax")
+	private Integer intensiteMax;
 
 	public Fire() {
 	}
 
 	public Fire(Date date, double positionX, double positionY, int intensityMax){
-		this.date = date;
-		this.day = new java.sql.Date(date.getTime());
-		this.hour = new Time(date.getTime());
-		this.positionX =positionX;
-		this.positionY = positionY;
-		this.intensityMax = intensityMax;
+		//this.dateAlerte = LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
+		this.heureAlerte = date.toInstant();
+		this.positionXFeu =positionX;
+		this.positionYFeu = positionY;
+		this.intensiteMax = intensityMax;
 	}
 
-	public Integer getId(){
+
+	public Integer getIntensiteMax() {
+		return intensiteMax;
+	}
+
+	public void setIntensiteMax(Integer intensiteMax) {
+		this.intensiteMax = intensiteMax;
+	}
+
+	public Double getPositionYFeu() {
+		return positionYFeu;
+	}
+
+	public void setPositionYFeu(Double positionYFeu) {
+		this.positionYFeu = positionYFeu;
+	}
+
+	public Double getPositionXFeu() {
+		return positionXFeu;
+	}
+
+	public void setPositionXFeu(Double positionXFeu) {
+		this.positionXFeu = positionXFeu;
+	}
+
+	public LocalDate getDateAlerte() {
+		return dateAlerte;
+	}
+
+	public void setDateAlerte(LocalDate dateAlerte) {
+		this.dateAlerte = dateAlerte;
+	}
+
+	public Instant getHeureAlerte() {
+		return heureAlerte;
+	}
+
+	public void setHeureAlerte(Instant heureAlerte) {
+		this.heureAlerte = heureAlerte;
+	}
+	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public Time getHour() {
-		return hour;
-	}
-
-	public void setHour(Time hour) {
-		this.hour = hour;
-	}
-
-	public double getPositionX() {
-		return positionX;
-	}
-
-	public void setPositionX(double positionX) {
-		this.positionX = positionX;
-	}
-
-	public double getPositionY() {
-		return positionY;
-	}
-
-	public void setPositionY(double positionY) {
-		this.positionY = positionY;
-	}
-
-	public int getIntensityMax() {
-		return intensityMax;
-	}
-
-	public void setIntensityMax(int intensityMax) {
-		this.intensityMax = intensityMax;
-	}
-
 	@Override
 	public String toString() {
-		return  positionX + "-" + positionY + "-" + intensityMax;
+		return  positionXFeu + "-" + positionYFeu + "-" + intensiteMax;
 	}
 }
