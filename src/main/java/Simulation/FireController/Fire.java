@@ -36,7 +36,7 @@ public class Fire {
 	}
 
 	public Fire(Date date, double positionX, double positionY, int intensityMax){
-		//this.dateAlerte = LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
+
 		this.heureAlerte = date.toInstant();
 		this.positionXFeu =positionX;
 		this.positionYFeu = positionY;

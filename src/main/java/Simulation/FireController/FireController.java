@@ -19,9 +19,18 @@ public class FireController {
 	public FireController(){
 
 	}
-	public FireController(List<Capteur> sensors, ViewController viewController){
+	public FireController(List<Capteur> sensors, ViewController viewController, AlertGenerator alertGenerator){
 		this.sensors = sensors;
 		this.viewController = viewController;
+		this.alertGenerator =alertGenerator;
+	}
+
+	public AlertGenerator getAlertGenerator() {
+		return alertGenerator;
+	}
+
+	public void setAlertGenerator(AlertGenerator alertGenerator) {
+		this.alertGenerator = alertGenerator;
 	}
 
 	public List<Fire> getFires() {
@@ -61,24 +70,39 @@ public class FireController {
 	 * @return Fire created
 	 */
 	public Fire calculatePositionFire(List<Capteur> sensors){
-		//attributeNewIntensity(sensors);
-		//getHigherSensors(sensors);
 
-		double randomX = sensors.get(0).getX();
-		double randomY = sensors.get(0).getY();
-		int randomIntensity = new Random().nextInt(maxIntensity + 1);
+		double x =0;
+		double y = 0;
+		int randomIntensity = 0;
+		for(Capteur sensor : sensors){
+			x += sensor.getX();
+			y += sensor.getY();
+			randomIntensity += sensor.getIntensity();
+		}
+		x = Math.abs((sensors.get(0).getX()-(x/sensors.size()*2)));
+		y = Math.abs((sensors.get(0).getY()-(y/sensors.size()*2)));
+
+		randomIntensity = randomIntensity/sensors.size();
 		Date date = new Date();
+		Fire fire= new Fire(date, x, y, randomIntensity);
+		System.out.println("Capteurs : " + sensors);
+		System.out.println("Fire created :" + fire +"\n");
+		return fire;
 
-		return new Fire(date, randomX, randomY, randomIntensity);
 
+	}
 
+	public Fire addFire(Fire fire){
+		fire.setId(fires.size());
+		fires.add(fire);
+		alertGenerator.refreshIdFire(fires.size());
+		return fire;
 	}
 
 	/**
 	 * attribute the new intensity of each sensor from the view
 	 */
 	public List<Capteur> attributeNewIntensity(List<Capteur> sensors) {
-		List<Capteur> newSensorList = new ArrayList<>();
 		for(int i = 0; i < this.sensors.size(); i++){
 			Capteur sensor = this.sensors.get(i);
 			for(Capteur sensor1 : sensors){
@@ -89,26 +113,16 @@ public class FireController {
 				}
 			}
 
-			newSensorList.add(sensor);
 		}
-		return newSensorList;
+		return sensors;
 	}
 
-	/**
-	 * Return the 3 Sensors with the highest Intensity
-	 * @param sensorList
-	 */
-	private void getHigherSensors(List<Capteur> sensorList) {
-		for(int j = 0; j<3; j++){
-			Capteur maxSensor = sensorList.get(0);
-			for(int i = 1; i< sensorList.size(); i++){
-				if(maxSensor.getIntensity() < sensorList.get(i).getIntensity()){
-					maxSensor = sensorList.get(i);
-				}
-			}
-			sensors.add(maxSensor);
-			sensorList.remove(maxSensor);
-		}
+	public Fire processFire(List<Capteur> capteurs){
+		List<Capteur> sensorsList = attributeNewIntensity(capteurs);
+		Fire fire = calculatePositionFire(sensorsList);
+		addFire(fire);
+		return  fire;
+
 	}
 
 	/**

@@ -53,16 +53,17 @@ public class JSonUtils {
 			sensorJSon.put("id", sensor.getId());
 			jsonObject.append("capteurs", sensorJSon);
 		}
-		//JSonUtils.readJSonSensor(jsonObject);
 		return jsonObject ;
 	}
 	public static JSONObject buildJSonFire(Fire fire)  {
 		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("id", fire.getId());
 		jsonObject.put("intensity", fire.getIntensiteMax());
 		jsonObject.put("positionX", fire.getPositionXFeu());
 		jsonObject.put("positionY", fire.getPositionYFeu());
-		jsonObject.put("id", fire.getId());
-		return jsonObject ;
+		JSONObject jsonObjectFire = new JSONObject();
+		jsonObjectFire.append("feux", jsonObject);
+		return jsonObjectFire ;
 	}
 	}
 
