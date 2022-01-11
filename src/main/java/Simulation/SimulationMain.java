@@ -36,7 +36,7 @@ public class SimulationMain { ;
 			List<Fire> fires = new ArrayList<>();
 			AlertGenerator alertGenerator = new AlertGenerator();
 			int i = 0;
-			while(i < 10) {
+			while(i < 5) {
 				fires.add(alertGenerator.generate());
 				i++;
 			}
@@ -44,13 +44,13 @@ public class SimulationMain { ;
 			ViewController viewController = new ViewController(fires, capteurInDataBase);
 			fireController.setViewController(viewController);
 			fireController.setAlertGenerator(alertGenerator);
+			fireController.setFires(fires);
 
 			//Server requests
 			getSensors getSensors = new getSensors(null);
 			getFire getFire = new getFire(null);
-			
+
 			server.createContext("/postCapteurs",  new postSensors(fireController));
-			server.createContext("/getFeux", getFire);
 
 			for(Fire fire : fires) {
 				List<Capteur> capteurs = new ArrayList<>(fireController.calculatePositionSensor(fire));
@@ -69,10 +69,11 @@ public class SimulationMain { ;
 				getSensors.setSensorsList(jsonObject.toString());
 				getFire.setFire(jsonObjectFire.toString());
 
+				server.createContext("/getFeux", getFire);
 				server.createContext("/getCapteurs", getSensors);
 
-				//Pause for 15s between each fire
-				Thread.sleep(15000);
+				//Pause for 20s between each fire
+				Thread.sleep(20000);
 			}
 			sessionFactory.close();
 

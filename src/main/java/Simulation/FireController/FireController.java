@@ -93,9 +93,10 @@ public class FireController {
 	}
 
 	public Fire addFire(Fire fire){
-		fire.setId(fires.size());
+
+		fire.setId(fires.size()+1);
 		fires.add(fire);
-		alertGenerator.refreshIdFire(fires.size());
+		alertGenerator.refreshIdFire(fires.size()+1);
 		return fire;
 	}
 

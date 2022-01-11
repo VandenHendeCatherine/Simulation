@@ -47,7 +47,7 @@ public class postSensors implements HttpHandler {
 		System.out.println("postFitre " + fire);
 		JSONObject jsonObject = JSonUtils.buildJSonFire(fire);
 		String response = jsonObject.toString();
-		System.out.println("postFitre Json " + jsonObject.toString());
+		System.out.println("postFitre Json " + jsonObject);
 		//Request configuration
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
 		exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");

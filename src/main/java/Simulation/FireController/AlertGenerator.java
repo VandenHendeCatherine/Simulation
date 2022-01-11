@@ -12,12 +12,12 @@ public class AlertGenerator {
 	private int id;
 
 	public AlertGenerator(){
-		id = 0;
+		id = 1;
 
 	}
 
 	public void refreshIdFire(int id){
-		this.id =id;
+		this.id = id;
 	}
 	public Fire generate(){
 		double randomX = minPositionX + new Random().nextDouble() * (maxPositionX - minPositionX);
@@ -25,8 +25,8 @@ public class AlertGenerator {
 		int randomIntensity = new Random().nextInt(maxIntensity + 1);
 		Date date = new Date();
 		Fire fire =new Fire(date, randomX, randomY, randomIntensity);
-		id ++;
 		fire.setId(id);
+		id ++;
 		return fire;
 	}
 

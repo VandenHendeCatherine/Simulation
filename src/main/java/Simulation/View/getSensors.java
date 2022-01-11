@@ -22,7 +22,6 @@ public class getSensors implements HttpHandler {
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
 		System.out.println("getCapteur : " + sensorsList);
 		exchange.sendResponseHeaders(200, sensorsList.length());
-		System.out.println(exchange.getRequestHeaders());
 		OutputStream os = exchange.getResponseBody();
 		os.write(sensorsList.getBytes());
 		os.close();

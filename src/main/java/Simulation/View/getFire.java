@@ -21,6 +21,7 @@ public class getFire implements HttpHandler {
 	public getFire(String sensorsList){
 		this.fire = sensorsList;
 	}
+
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 
@@ -28,7 +29,6 @@ public class getFire implements HttpHandler {
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
 		System.out.println("getFeux : " + fire);
 		exchange.sendResponseHeaders(200, fire.length());
-		System.out.println(exchange.getRequestHeaders());
 		OutputStream os = exchange.getResponseBody();
 		os.write(fire.getBytes());
 		os.close();
