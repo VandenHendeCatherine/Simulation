@@ -76,7 +76,10 @@ public class SimulationMain { ;
 				Thread.sleep(20000);
 			}
 
-			session.save(capteurInDataBase);
+			for(Capteur capteur: capteurInDataBase){
+
+				session.save(capteur);
+			}
 			sessionFactory.close();
 
 

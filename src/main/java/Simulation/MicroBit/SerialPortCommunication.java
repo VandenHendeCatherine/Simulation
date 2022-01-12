@@ -42,14 +42,14 @@ public class SerialPortCommunication {
 		                                   .collect(Collectors.toList());
 		String command = String.join(", ", sensorsToString);
 
+		System.out.println("Microbit : " + command);
 		//secure data
-
 		byte[] encodedData = Base64.getEncoder().encode(command.getBytes());
 		byte[] endOfLine = "\r\n".getBytes();
 		byte[] message = new byte[endOfLine.length + encodedData.length ];
 		System.arraycopy(encodedData, 0,message,0, encodedData.length);
 		System.arraycopy(endOfLine, 0,message, encodedData.length , endOfLine.length);
-
+		System.out.println("Chiffrage :" + new String((message)));
 		//send data
 		serialPort.writeBytes(message, message.length);
 	}
