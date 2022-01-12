@@ -36,7 +36,7 @@ public class SimulationMain { ;
 			List<Fire> fires = new ArrayList<>();
 			AlertGenerator alertGenerator = new AlertGenerator();
 			int i = 0;
-			while(i < 5) {
+			while(i < 40) {
 				fires.add(alertGenerator.generate());
 				i++;
 			}
