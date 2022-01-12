@@ -75,7 +75,10 @@ public class SimulationMain { ;
 				//Pause for 20s between each fire
 				Thread.sleep(20000);
 			}
+
+			session.save(capteurInDataBase);
 			sessionFactory.close();
+
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();

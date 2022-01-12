@@ -3,6 +3,7 @@ package Simulation.View;
 import Simulation.FireController.Fire;
 import Simulation.FireController.FireController;
 import Simulation.FireController.Capteur;
+import Simulation.MicroBit.SerialPortCommunication;
 import com.sun.net.httpserver.*;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -48,6 +49,11 @@ public class postSensors implements HttpHandler {
 		JSONObject jsonObject = JSonUtils.buildJSonFire(fire);
 		String response = jsonObject.toString();
 		System.out.println("postFitre Json " + jsonObject);
+
+		//micro-bit
+		SerialPortCommunication serialPortCommunication = new SerialPortCommunication();
+		serialPortCommunication.sendSensorIntensityToComm(sensorList);
+		serialPortCommunication.closeCommunication();
 		//Request configuration
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
 		exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
