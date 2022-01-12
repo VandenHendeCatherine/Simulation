@@ -1,4 +1,4 @@
-package Emergency;
+package Simulation;
 
 import Emergency.FireController.*;
 import Emergency.View.*;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class EmergencyMain { ;
+public class SimulationMain { ;
 
 	public static void main(String[] args) throws IOException, MqttException {
 		SessionFactory sessionFactory = getSessionFactory();
@@ -35,6 +35,7 @@ public class EmergencyMain { ;
 			fireController.setCamions(camionInDataBase);
 			fireController.setCasernes(caserneInDataBase);
 			fireController.setFires(new ArrayList<>());
+
 
 			//MQTT Broker connection
 			final String serverUrl   = "tcp://164.4.3.201:1883";
@@ -97,7 +98,6 @@ public class EmergencyMain { ;
 
 			}
 
-		//session.save(capteurInDataBase);
 			sessionFactory.close();
 
 	}
