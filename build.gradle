@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'Simulation.SimulationMain'
+group 'Emergency.EmergencyMain'
 version '1.0-SNAPSHOT'
 
 repositories {

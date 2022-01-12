@@ -1,9 +1,7 @@
-package Simulation.FireController;
+package Emergency.FireController;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FireControllerTest {
 

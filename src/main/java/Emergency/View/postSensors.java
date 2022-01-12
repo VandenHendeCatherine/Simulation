@@ -1,9 +1,9 @@
-package Simulation.View;
+package Emergency.View;
 
-import Simulation.FireController.Fire;
-import Simulation.FireController.FireController;
-import Simulation.FireController.Capteur;
-import Simulation.MicroBit.SerialPortCommunication;
+import Emergency.FireController.Fire;
+import Emergency.FireController.FireController;
+import Emergency.FireController.Capteur;
+import Emergency.MicroBit.SerialPortCommunication;
 import com.sun.net.httpserver.*;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;

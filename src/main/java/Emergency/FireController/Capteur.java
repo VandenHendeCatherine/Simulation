@@ -1,4 +1,4 @@
-package Simulation.FireController;
+package Emergency.FireController;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
