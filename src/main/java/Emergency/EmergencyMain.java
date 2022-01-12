@@ -50,6 +50,7 @@ public class EmergencyMain { ;
 			getSensors getSensors = new getSensors(null);
 			getFire getFire = new getFire(null);
 
+			server.createContext("/postCapteurs",  new postSensors(fireController));
 
 			for(Fire fire : fires) {
 				List<Capteur> capteurs = new ArrayList<>(fireController.calculatePositionSensor(fire));
