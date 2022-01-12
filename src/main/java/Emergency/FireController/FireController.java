@@ -1,6 +1,6 @@
-package Simulation.FireController;
+package Emergency.FireController;
 
-import Simulation.View.ViewController;
+import Emergency.View.ViewController;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +14,7 @@ public class FireController {
 	private Fire currentFire;
 	private ViewController viewController;
 	private int maxIntensity = 9;
-	private List<Camion> camions;
+	private List<Emergency.FireController.Camion> camions;
 	private List<Caserne> casernes;
 
 	public List<Caserne> getCasernes() {
@@ -37,7 +37,7 @@ public class FireController {
 		return camions;
 	}
 
-	public void setCamions(List<Camion> camions) {
+	public void setCamions(List<Emergency.FireController.Camion> camions) {
 		this.camions = camions;
 	}
 
