@@ -1,8 +1,8 @@
-package Emergency;
+package Simulation;
 
-import Emergency.FireController.*;
-import Emergency.MicroBit.SerialPortCommunication;
-import Emergency.View.*;
+import Simulation.FireController.*;
+import Simulation.MicroBit.SerialPortCommunication;
+import Simulation.View.*;
 import com.sun.net.httpserver.HttpServer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,7 +16,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmergencyMain { ;
+public class SimulationMain { ;
 
 	public static void main(String[] args) throws  IOException {
 		SessionFactory sessionFactory = getSessionFactory();

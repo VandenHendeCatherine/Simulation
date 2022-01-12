@@ -1,6 +1,6 @@
-package Emergency.FireController;
+package Simulation.FireController;
 
-import Emergency.View.ViewController;
+import Simulation.View.ViewController;
 
 import java.util.ArrayList;
 import java.util.Date;

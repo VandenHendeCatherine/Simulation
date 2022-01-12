@@ -1,9 +1,10 @@
-package Emergency.FireController;
+package Simulation.FireController;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;

@@ -1,6 +1,6 @@
-package Emergency.MicroBit;
+package Simulation.MicroBit;
 
-import Emergency.FireController.Capteur;
+import Simulation.FireController.Capteur;
 import com.fazecast.jSerialComm.*;
 
 import java.util.Base64;
