@@ -3,11 +3,9 @@ package Emergency.FireController;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "capteur")
 public class Capteur {
 	@Id
 	@Column(name = "id",
@@ -70,7 +68,8 @@ public class Capteur {
 		this.id = id;
 	}
 
-	public String toString(){
-		return id*4.5 + "-" + intensity*3;
+	@Override
+	public String toString() {
+		return "Capteur{" + "id=" + id + '}';
 	}
 }

@@ -17,11 +17,11 @@ class AlertGeneratorTest {
 	void generate() {
 		AlertGenerator alertGenerator = new AlertGenerator();
 		Fire fire = alertGenerator.generate();
-		assertTrue(fire.getPositionX()<=maxPositionX);
-		assertTrue(fire.getPositionX()>=minPositionX);
-		assertTrue(fire.getPositionY()<=maxPositionY);
-		assertTrue(fire.getPositionY()>=minPositionY);
-		assertTrue(fire.getIntensityMax()<=maxIntensity);
-		assertTrue(fire.getIntensityMax()>=0);
+		assertTrue(fire.getPositionXFeu()<=maxPositionX);
+		assertTrue(fire.getPositionXFeu()>=minPositionX);
+		assertTrue(fire.getPositionYFeu()<=maxPositionY);
+		assertTrue(fire.getPositionYFeu()>=minPositionY);
+		assertTrue(fire.getIntensiteMax()<=maxIntensity);
+		assertTrue(fire.getIntensiteMax()>=0);
 	}
 }

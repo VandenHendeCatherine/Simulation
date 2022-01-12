@@ -18,8 +18,8 @@ public class getFire implements HttpHandler {
 		this.fire = fire;
 	}
 
-	public getFire(String sensorsList){
-		this.fire = sensorsList;
+	public getFire(String fire){
+		this.fire = fire;
 	}
 
 	@Override

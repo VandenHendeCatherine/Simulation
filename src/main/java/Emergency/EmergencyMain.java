@@ -24,103 +24,90 @@ public class EmergencyMain { ;
 		SessionFactory sessionFactory = getSessionFactory();
 		FireController fireController = new FireController();
 
-
-		final String serverUrl   = "tcp://164.4.3.201:1883";     /* ssl://mqtt.cumulocity.com:8883 for a secure connection */
-		final String clientId    = "my_mqtt_java_client";
-		final String device_name = "My Java MQTT device";
-		final String tenant      = "<<tenant_ID>>";
-		final String username    = "<<username>>";
-		final String password    = "<<password>>";
-
-		// MQTT connection options
-		final MqttConnectOptions options = new MqttConnectOptions();
-		options.setUserName(tenant + "/" + username);
-		options.setPassword(password.toCharArray());
-
-		// connect the client to Cumulocity IoT
-		final MqttClient client = new MqttClient(serverUrl, clientId, null);
-		client.connect();
-
-		// listen for operations
-		List<Capteur> capteurs = new ArrayList<>();
-		client.subscribe("python/capteur_data", new IMqttMessageListener() {
-			public void messageArrived (final String topic, final MqttMessage message) throws Exception {
-				final String payload = new String(message.getPayload());
-
-				System.out.println("Received capteur " + payload);
-				List<String> id = List.of(payload.split(" "));
-				List<String> intensity = List.of(id.get(1).split("="));
-				Capteur capteur = new Capteur(new Integer(id.get(0)), new Integer(intensity.get(1)));
-				capteurs.add(capteur);
-				if(capteurs.size()==4){
-
-				}
-			}
-		});
-
-		//Server
-		HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
-		server.start();
-		System.out.println("tata");
 		try (Session session = sessionFactory.openSession()) {
-
 			List<Capteur> capteurInDataBase = loadAllData(Capteur.class,session);
+			List<Caserne> caserneInDataBase = loadAllData(Caserne.class,session);
+			List<Camion> camionInDataBase = loadAllData(Camion.class,session);
 
 			fireController.setSensors(capteurInDataBase);
-
-			//Generate Fires
-			List<Fire> fires = new ArrayList<>();
-			AlertGenerator alertGenerator = new AlertGenerator();
-			int i = 0;
-			while(i < 5) {
-				fires.add(alertGenerator.generate());
-				i++;
-			}
-
-			ViewController viewController = new ViewController(fires, capteurInDataBase);
+			ViewController viewController = new ViewController(null, capteurInDataBase);
 			fireController.setViewController(viewController);
-			fireController.setAlertGenerator(alertGenerator);
-			fireController.setFires(fires);
+			fireController.setCamions(camionInDataBase);
+			fireController.setCasernes(caserneInDataBase);
+			fireController.setFires(new ArrayList<>());
+
+			//MQTT Broker connection
+			final String serverUrl   = "tcp://164.4.3.201:1883";
+			final String clientId    = "my_mqtt_java_client";
+
+			// connect the client to Cumulocity IoT
+			final MqttClient client = new MqttClient(serverUrl, clientId, null);
+			client.connect();
+
+			//Server
+			HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+			server.start();
 
 			//Server requests
 			getCamion getCamion = new getCamion(null);
 			getFire getFire = new getFire(null);
 
-			List<Camion> camions = new ArrayList<>(fireController.getCamions());
-			for(Fire fire : fires) {
+			// listen for operations
 
-				//Building JSON
-				JSONObject jsonObject = JSonUtils.buildJSonCamions(camions);
-				JSONObject jsonObjectFire = JSonUtils.buildJSonFire(fire);
+			List<Capteur> capteurs = new ArrayList<>();
+			client.subscribe("python/capteur_data", new IMqttMessageListener() {
+				public void messageArrived (final String topic, final MqttMessage message) throws Exception {
+					final String payload = new String(message.getPayload());
+					Fire[] fire = { new Fire() };
+					List<Camion> camions = new ArrayList<>(fireController.getCamions());
+					System.out.println("Received capteur " + payload);
+					List<String> id = List.of(payload.split(" "));
+					List<String> intensity = List.of(id.get(1).split("="));
+					Capteur capteur = new Capteur(Integer.valueOf(id.get(0)), Integer.valueOf(intensity.get(1)));
+					capteurs.add(capteur);
+					if(capteurs.size()==4) {
+						fire[0] = fireController.processFire(capteurs);
 
+						JSONObject fireString = JSonUtils.buildJSonFire(fire[0]);
+						System.out.println("Fiiiire " + fireString.toString());
+						getFire.setFire(fireString.toString());
 
+						int i =0;
+						for(Camion camion : camions){
+							camion.setPositionXCamion(fire[i].getPositionXFeu()+0.02);
+							camion.setPositionYCamion(fire[i].getPositionYFeu()+0.05);
+							i++;
+						}
+						//Building JSON
+						JSONObject jsonObject = JSonUtils.buildJSonCamions((List<Camion>) camions.get(0));
+						JSONObject jsonObjectFire = JSonUtils.buildJSonFire(fire[0]);
 
-				//Server requests update
-				getCamion.setSensorsList(jsonObject.toString());
-				getFire.setFire(jsonObjectFire.toString());
+						//Server requests update
+						getCamion.setSensorsList(jsonObject.toString());
+						getFire.setFire(jsonObjectFire.toString());
 
-				//server.createContext("/getFeux", getFire);
-				//server.createContext("/getCapteurs", getSensors);
+						capteurs.clear();
+					}
 
-				//Pause for 20s between each fire
-				Thread.sleep(20000);
+					server.createContext("/getFeux", getFire);
+					server.createContext("/getCamions", getCamion);
+
+				}
+			});
+
 			}
 
-			//session.save(capteurInDataBase);
+		//session.save(capteurInDataBase);
 			sessionFactory.close();
 
-
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	//Hibernate configuration
 	private static SessionFactory getSessionFactory() {
 		Configuration config = new Configuration();
 		config.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-		config.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:30306/Simulation");
-		config.setProperty("hibernate.connection.username", "root");
+		config.setProperty("hibernate.connection.url", "jdbc:mysql://164.4.3.175:3306/EmergencyLogic");
+		config.setProperty("hibernate.connection.username", "Emergency");
 		config.setProperty("hibernate.connection.password", "CYFBcpe2021");
 		config.setProperty("dialect", "net.sf.hibernate.dialect.MySQLDialect");
 		config.addAnnotatedClass(Capteur.class);

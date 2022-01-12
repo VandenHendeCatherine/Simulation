@@ -9,13 +9,29 @@ import java.util.Random;
 
 public class FireController {
 
-	private AlertGenerator alertGenerator;
 	private List<Fire> fires;
 	private List<Capteur> sensors;
 	private Fire currentFire;
 	private ViewController viewController;
 	private int maxIntensity = 9;
 	private List<Camion> camions;
+	private List<Caserne> casernes;
+
+	public List<Caserne> getCasernes() {
+		return casernes;
+	}
+
+	public void setCasernes(List<Caserne> casernes) {
+		this.casernes = casernes;
+	}
+
+	public List<Camion> getCamion() {
+		return camions;
+	}
+
+	public void setCamion(List<Camion> camionInDataBase) {
+		this.camions = camionInDataBase;
+	}
 
 	public List<Camion> getCamions() {
 		return camions;
@@ -28,19 +44,11 @@ public class FireController {
 	public FireController(){
 
 	}
-	public FireController(List<Capteur> sensors, ViewController viewController, AlertGenerator alertGenerator){
+	public FireController(List<Capteur> sensors, ViewController viewController){
 		this.sensors = sensors;
 		this.viewController = viewController;
-		this.alertGenerator =alertGenerator;
 	}
 
-	public AlertGenerator getAlertGenerator() {
-		return alertGenerator;
-	}
-
-	public void setAlertGenerator(AlertGenerator alertGenerator) {
-		this.alertGenerator = alertGenerator;
-	}
 
 	public List<Fire> getFires() {
 		return fires;
@@ -105,7 +113,6 @@ public class FireController {
 
 		fire.setId(fires.size()+1);
 		fires.add(fire);
-		alertGenerator.refreshIdFire(fires.size()+1);
 		return fire;
 	}
 
