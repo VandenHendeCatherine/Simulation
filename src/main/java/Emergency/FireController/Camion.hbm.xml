@@ -1,0 +1,17 @@
+<?xml version="1.0"?><!DOCTYPE hibernate-mapping
+        PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"><hibernate-mapping>
+    <class name="Emergency.FireController.Camion" table="caserne">
+        <id name="id" type="Integer" column="idCamion">
+            <generator class="native"/>
+        </id>
+        <property name="typeCamion" type="String" length="50">  <column name="typeCamion" /></property>
+        <property name="positionXCamion" type="Double"  > <column name="positionXCamion" /></property>
+        <property name="positionYCamion" type="Double"  > <column name="positionYCamion" /></property>
+        <property name="capaciteCamion" type="Integer" > <column name="capaciteCamion" /></property>
+        <property name="nbPompier" type="Integer" > <column name="nbPompier" /></property>
+        <property name="qttEauCamion" type="Double" > <column name="qttEauCamion" /></property>
+        <property name="pleinCamion" type="Double" > <column name="pleinCamion" /></property>
+
+    </class>
+</hibernate-mapping>

@@ -1,9 +1,9 @@
 package Emergency;
 
 import Emergency.FireController.*;
-import Emergency.MicroBit.SerialPortCommunication;
 import Emergency.View.*;
 import com.sun.net.httpserver.HttpServer;
+import org.eclipse.paho.client.mqttv3.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -15,17 +15,53 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class EmergencyMain { ;
 
-	public static void main(String[] args) throws  IOException {
+	public static void main(String[] args) throws IOException, MqttException {
 		SessionFactory sessionFactory = getSessionFactory();
 		FireController fireController = new FireController();
 
-		//Server
-		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-		server.start();
 
+		final String serverUrl   = "tcp://164.4.3.201:1883";     /* ssl://mqtt.cumulocity.com:8883 for a secure connection */
+		final String clientId    = "my_mqtt_java_client";
+		final String device_name = "My Java MQTT device";
+		final String tenant      = "<<tenant_ID>>";
+		final String username    = "<<username>>";
+		final String password    = "<<password>>";
+
+		// MQTT connection options
+		final MqttConnectOptions options = new MqttConnectOptions();
+		options.setUserName(tenant + "/" + username);
+		options.setPassword(password.toCharArray());
+
+		// connect the client to Cumulocity IoT
+		final MqttClient client = new MqttClient(serverUrl, clientId, null);
+		client.connect();
+
+		// listen for operations
+		List<Capteur> capteurs = new ArrayList<>();
+		client.subscribe("python/capteur_data", new IMqttMessageListener() {
+			public void messageArrived (final String topic, final MqttMessage message) throws Exception {
+				final String payload = new String(message.getPayload());
+
+				System.out.println("Received capteur " + payload);
+				List<String> id = List.of(payload.split(" "));
+				List<String> intensity = List.of(id.get(1).split("="));
+				Capteur capteur = new Capteur(new Integer(id.get(0)), new Integer(intensity.get(1)));
+				capteurs.add(capteur);
+				if(capteurs.size()==4){
+
+				}
+			}
+		});
+
+		//Server
+		HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
+		server.start();
+		System.out.println("tata");
 		try (Session session = sessionFactory.openSession()) {
 
 			List<Capteur> capteurInDataBase = loadAllData(Capteur.class,session);
@@ -47,35 +83,30 @@ public class EmergencyMain { ;
 			fireController.setFires(fires);
 
 			//Server requests
-			getSensors getSensors = new getSensors(null);
+			getCamion getCamion = new getCamion(null);
 			getFire getFire = new getFire(null);
 
-
+			List<Camion> camions = new ArrayList<>(fireController.getCamions());
 			for(Fire fire : fires) {
-				List<Capteur> capteurs = new ArrayList<>(fireController.calculatePositionSensor(fire));
 
 				//Building JSON
-				JSONObject jsonObject = JSonUtils.buildJSonSensors(capteurs);
+				JSONObject jsonObject = JSonUtils.buildJSonCamions(camions);
 				JSONObject jsonObjectFire = JSonUtils.buildJSonFire(fire);
 
-				//micro-bit
-				SerialPortCommunication serialPortCommunication = new SerialPortCommunication();
-				serialPortCommunication.sendSensorIntensityToComm(capteurs);
-				serialPortCommunication.closeCommunication();
-				capteurs.clear();
+
 
 				//Server requests update
-				getSensors.setSensorsList(jsonObject.toString());
+				getCamion.setSensorsList(jsonObject.toString());
 				getFire.setFire(jsonObjectFire.toString());
 
-				server.createContext("/getFeux", getFire);
-				server.createContext("/getCapteurs", getSensors);
+				//server.createContext("/getFeux", getFire);
+				//server.createContext("/getCapteurs", getSensors);
 
 				//Pause for 20s between each fire
 				Thread.sleep(20000);
 			}
 
-			session.save(capteurInDataBase);
+			//session.save(capteurInDataBase);
 			sessionFactory.close();
 
 
@@ -95,6 +126,8 @@ public class EmergencyMain { ;
 		config.addAnnotatedClass(Capteur.class);
 		config.addAnnotatedClass(Fire.class);
 		config.addAnnotatedClass(Intervention.class);
+		config.addAnnotatedClass(Caserne.class);
+		config.addAnnotatedClass(Camion.class);
 		return config.buildSessionFactory();
 	}
 

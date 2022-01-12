@@ -1,0 +1,15 @@
+<?xml version="1.0"?><!DOCTYPE hibernate-mapping
+        PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"><hibernate-mapping>
+    <class name="Emergency.FireController.Caserne" table="caserne">
+        <id name="id" type="Integer" column="idCaserne">
+            <generator class="native"/>
+        </id>
+        <property name="nomCaserne" type="String" length="50">  <column name="nomCaserne" /></property>
+        <property name="positionXCaserne" type="Double"  > <column name="positionXCaserne" /></property>
+        <property name="positionYCaserne" type="Double"  > <column name="positionYCaserne" /></property>
+        <property name="qttEauCaserne" type="Double" > <column name="qttEauCaserne" /></property>
+        <property name="pleinCaserne" type="Double" > <column name="pleinCaserne" /></property>
+
+    </class>
+</hibernate-mapping>

@@ -1,5 +1,6 @@
 package Emergency.View;
 
+import Emergency.FireController.Camion;
 import Emergency.FireController.Capteur;
 import Emergency.FireController.Fire;
 import org.json.JSONArray;
@@ -45,13 +46,16 @@ public class JSonUtils {
 	}
 
 
-	public static JSONObject buildJSonSensors(List<Capteur> sensors)  {
+	public static JSONObject buildJSonCamions(List<Camion> sensors)  {
 		JSONObject jsonObject = new JSONObject();
-		for(Capteur sensor: sensors){
+		for(Camion sensor: sensors){
 			JSONObject sensorJSon = new JSONObject();
-			sensorJSon.put("intensity", sensor.getIntensity());
+			sensorJSon.put("capacite", sensor.getCapaciteCamion());
 			sensorJSon.put("id", sensor.getId());
-			jsonObject.append("capteurs", sensorJSon);
+			sensorJSon.put("positionX", sensor.getPositionXCamion());
+			sensorJSon.put("positionY", sensor.getPositionYCamion());
+			sensorJSon.put("type", sensor.getTypeCamion());
+			jsonObject.append("camion", sensorJSon);
 		}
 		return jsonObject ;
 	}

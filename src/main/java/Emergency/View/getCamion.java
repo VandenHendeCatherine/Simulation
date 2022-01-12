@@ -5,25 +5,25 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.*;
 
-public class getSensors implements HttpHandler {
-	private String sensorsList;
+public class getCamion implements HttpHandler {
+	private String camionsList;
 
 	public void setSensorsList(String sensorsList) {
-		this.sensorsList = sensorsList;
+		this.camionsList = sensorsList;
 	}
 
-	public getSensors(String sensorsList){
-		this.sensorsList = sensorsList;
+	public getCamion(String sensorsList){
+		this.camionsList = sensorsList;
 	}
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 
 		//send sensors
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-		System.out.println("getCapteur : " + sensorsList);
-		exchange.sendResponseHeaders(200, sensorsList.length());
+		System.out.println("getCamion : " + camionsList);
+		exchange.sendResponseHeaders(200, camionsList.length());
 		OutputStream os = exchange.getResponseBody();
-		os.write(sensorsList.getBytes());
+		os.write(camionsList.getBytes());
 		os.close();
 	}
 

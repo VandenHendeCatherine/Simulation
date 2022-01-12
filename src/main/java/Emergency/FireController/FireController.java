@@ -15,6 +15,15 @@ public class FireController {
 	private Fire currentFire;
 	private ViewController viewController;
 	private int maxIntensity = 9;
+	private List<Camion> camions;
+
+	public List<Camion> getCamions() {
+		return camions;
+	}
+
+	public void setCamions(List<Camion> camions) {
+		this.camions = camions;
+	}
 
 	public FireController(){
 
