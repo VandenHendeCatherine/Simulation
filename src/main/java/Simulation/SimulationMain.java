@@ -1,12 +1,7 @@
-package Emergency;
+package Simulation;
 
 import Emergency.FireController.*;
 import Emergency.View.*;
-import Emergency.FireController.Capteur;
-import Emergency.FireController.FireController;
-import Emergency.View.ViewController;
-import Emergency.View.getCamion;
-import Emergency.View.getFire;
 import com.sun.net.httpserver.HttpServer;
 import org.eclipse.paho.client.mqttv3.*;
 import org.hibernate.Session;
@@ -20,8 +15,10 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class Emergency { ;
+public class SimulationMain { ;
 
 	public static void main(String[] args) throws IOException, MqttException {
 		SessionFactory sessionFactory = getSessionFactory();
@@ -29,8 +26,8 @@ public class Emergency { ;
 
 		try (Session session = sessionFactory.openSession()) {
 			List<Capteur> capteurInDataBase = loadAllData(Capteur.class,session);
-			List<Caserne> caserneInDataBase = loadAllData(Caserne.class, session);
-			List<Camion> camionInDataBase = loadAllData(Camion.class, session);
+			List<Caserne> caserneInDataBase = loadAllData(Caserne.class,session);
+			List<Camion> camionInDataBase = loadAllData(Camion.class,session);
 
 			fireController.setSensors(capteurInDataBase);
 			ViewController viewController = new ViewController(null, capteurInDataBase);

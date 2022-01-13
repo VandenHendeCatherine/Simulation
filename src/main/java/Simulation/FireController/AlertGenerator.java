@@ -1,4 +1,4 @@
-package Emergency.FireController;
+package Simulation.FireController;
 
 import java.util.Date;
 import java.util.Random;

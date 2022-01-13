@@ -1,4 +1,4 @@
-package Emergency.FireController;
+package Simulation.FireController;
 
 import javax.persistence.*;
 import java.time.Instant;

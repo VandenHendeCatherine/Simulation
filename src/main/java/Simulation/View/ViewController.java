@@ -1,7 +1,7 @@
-package Emergency.View;
+package Simulation.View;
 
-import Emergency.FireController.Capteur;
-import Emergency.FireController.Fire;
+import Simulation.FireController.Capteur;
+import Simulation.FireController.Fire;
 
 import java.util.*;
 import java.util.stream.Collectors;
