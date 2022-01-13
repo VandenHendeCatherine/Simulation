@@ -1,13 +1,14 @@
 package Emergency.FireController;
 
+import Emergency.View.JSonUtils;
 import Emergency.View.ViewController;
+import Emergency.View.getCamion;
+import Emergency.View.getFire;
 import com.sun.xml.fastinfoset.tools.FI_SAX_Or_XML_SAX_SAXEvent;
+import org.json.JSONObject;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FireController {
 
@@ -99,16 +100,16 @@ public class FireController {
 	 */
 	public Fire calculatePositionFire(List<Capteur> sensors){
 
-		double x =0;
+		double x = 0;
 		double y = 0;
 		int randomIntensity = 0;
 		for(Capteur sensor : sensors){
-			x += (10 - sensor.getIntensity())* sensor.getX();
-			y += (10 - sensor.getIntensity())*sensor.getY();
+			x += (10.0 - sensor.getIntensity())*sensor.getX();
+			y += (10.0 - sensor.getIntensity())*sensor.getY();
 			randomIntensity += sensor.getIntensity();
 		}
-		x = Math.abs(x/4);
-		y = Math.abs(x/4);
+		x = Math.abs(x/(40.0-randomIntensity));
+		y = Math.abs(y/(40.0-randomIntensity));
 		randomIntensity = randomIntensity/sensors.size();
 
 		Date date = new Date();
@@ -134,7 +135,7 @@ public class FireController {
 		for(int i = 0; i < this.sensors.size(); i++){
 			Capteur sensor = this.sensors.get(i);
 			for(Capteur sensor1 : sensors){
-				if(sensor.getId() == sensor1.getId()){
+				if(Objects.equals(sensor.getId(), sensor1.getId())){
 					sensor1.setX(sensor.getX());
 					sensor1.setY(sensor.getY());
 					this.sensors.get(i).setIntensity(sensor1.getIntensity());
@@ -156,27 +157,45 @@ public class FireController {
 
 	}
 
-
-	/**
-	 *
-	 * @param fire
-	 * @return
-	 */
-	public List<Capteur> calculatePositionSensor(Fire fire){
-		currentFire=fire;
-		List<Capteur> sensorList = new ArrayList<>();
-		for(Capteur sensor : sensors){
-			double x = Math.abs(currentFire.getPositionXFeu() - sensor.getX());
-			double y = Math.abs(currentFire.getPositionYFeu() - sensor.getY());
-			if((x <= 0.02 ) && ( y <= 0.01)){
-				sensorList.add(sensor);
+	public void camionManagement(){
+		while(true){
+			for(Intervention intervention: interventions){
+			//	deplaceCamion(intervention.getCamion(), intervention.getIdFeu());
 			}
 		}
-		for(Capteur sensor : sensorList){
-			int randomIntensity = new Random().nextInt(maxIntensity + 1);
-			sensor.setIntensity(randomIntensity);
-		}
-		return sensorList;
+
 	}
 
+	public void deplaceCamion(List<Camion> camions, Fire fire){
+		for(Camion camion: camions){
+			//trajectoire(camion.getCaserne(),fire,camion);
+		}
+	}
+
+	public void trajectoire(Caserne caserne, Fire fire, Camion camion){
+		double X = camion.getPositionXCamion() +(Math.sqrt(Math.pow((fire.getPositionXFeu() - caserne.getPositionXCaserne()), 2)/Math.pow((fire.getPositionYFeu() - caserne.getPositionYCaserne()), 2)))/10;
+		double Y = X*(fire.getPositionXFeu() -caserne.getPositionXCaserne())/(fire.getPositionYFeu() - caserne.getPositionYCaserne())+fire.getPositionXFeu();
+		camion.setPositionXCamion(X);
+		camion.setPositionYCamion(Y);
+	}
+	public void gatherCapteurToCreateFire(FireController fireController, getCamion getCamion, getFire getFire, List<Capteur> capteurs, Fire[] fire, List<Camion> camions) {
+		if(capteurs.size()==4) {
+			fire[0] = fireController.processFire(capteurs);
+
+			JSONObject fireString = JSonUtils.buildJSonFire(fire[0]);
+			System.out.println("Fiiiire " + fireString);
+			getFire.setFire(fireString.toString());
+
+
+			camions.get(1).setPositionXCamion(fire[0].getPositionXFeu()+0.02);
+			camions.get(1).setPositionYCamion(fire[0].getPositionYFeu()+0.05);
+
+			//Building JSON
+			JSONObject jsonObject = JSonUtils.buildJSonCamions(camions);
+
+			//Server requests update
+			getCamion.setSensorsList(jsonObject.toString());
+			capteurs.clear();
+		}
+	}
 }

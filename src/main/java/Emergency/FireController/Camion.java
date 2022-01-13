@@ -1,8 +1,6 @@
 package Emergency.FireController;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Camion {
@@ -33,6 +31,40 @@ public class Camion {
 	@Column(name = "pleinCamion")
 	private Double pleinCamion;
 
+	/*@ManyToOne
+	@JoinColumn(name = "caserneidcaserne")
+	private Caserne caserne;
+
+	@ManyToOne
+	@JoinColumn(name = "intervention")
+	private Intervention intervention;
+
+	public void setCaserne(Caserne caserne) {
+		this.caserne = caserne;
+	}
+*/
+//	private boolean used;
+
+	/*public Intervention getIntervention() {
+		return intervention;
+	}
+
+	public void setIntervention(Intervention intervention) {
+		this.intervention = intervention;
+	}
+
+	public Caserne getCaserne() {
+		return caserne;
+	}
+*/
+/*	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
+	}
+*/
 	public Double getPleinCamion() {
 		return pleinCamion;
 	}

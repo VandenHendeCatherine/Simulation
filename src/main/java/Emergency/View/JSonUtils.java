@@ -12,40 +12,6 @@ import java.util.List;
 public class JSonUtils {
 
 
-		@SuppressWarnings("unchecked")
-		public static Capteur readJSonSensor(String jsonObject1) throws ParseException {
-			JSONObject jsonObject = new JSONObject(jsonObject1);
-			JSONArray jsonArray = (JSONArray) jsonObject.get("capteurs");
-			JSONObject sensor = (JSONObject) jsonArray.get(0);
-			// getting id and intensity
-			Integer id = (Integer) sensor.get("id");
-			Integer intensity = (Integer) sensor.get("intensity");
-
-			Capteur newSensor = new Capteur();
-			newSensor.setId(id);
-			newSensor.setIntensity(intensity);
-			System.out.println(id);
-			System.out.println(intensity);
-			return newSensor;
-		}
-
-	public static Capteur readJSonFire(JSONObject jsonObject){
-
-		JSONArray jsonArray = (JSONArray) jsonObject.get("capteurs");
-		JSONObject sensor = (JSONObject) jsonArray.get(0);
-		// getting id and intensity
-		Integer id = (Integer) sensor.get("id");
-		Integer intensity = (Integer) sensor.get("intensity");
-
-		Capteur newSensor = new Capteur();
-		newSensor.setId(id);
-		newSensor.setIntensity(intensity);
-		System.out.println(id);
-		System.out.println(intensity);
-		return newSensor;
-	}
-
-
 	public static JSONObject buildJSonCamions(List<Camion> sensors)  {
 		JSONObject jsonObject = new JSONObject();
 		for(Camion sensor: sensors){
