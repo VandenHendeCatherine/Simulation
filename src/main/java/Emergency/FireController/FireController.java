@@ -103,12 +103,12 @@ public class FireController {
 		double y = 0;
 		int randomIntensity = 0;
 		for(Capteur sensor : sensors){
-			x += sensor.getX();
-			y += sensor.getY();
+			x += (10 - sensor.getIntensity())* sensor.getX();
+			y += (10 - sensor.getIntensity())*sensor.getY();
 			randomIntensity += sensor.getIntensity();
 		}
-		x = Math.abs((sensors.get(0).getX()-(x/sensors.size()*2)));
-		y = Math.abs((sensors.get(0).getY()-(y/sensors.size()*2)));
+		x = Math.abs(x/4);
+		y = Math.abs(x/4);
 
 		randomIntensity = randomIntensity/sensors.size();
 		Date date = new Date();
