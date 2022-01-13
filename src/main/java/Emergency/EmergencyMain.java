@@ -29,11 +29,15 @@ public class EmergencyMain {
 			List<Capteur> capteurInDataBase = loadAllData(Capteur.class,session);
 			List<Caserne> caserneInDataBase = loadAllData(Caserne.class,session);
 			List<Camion> camionInDataBase = loadAllData(Camion.class,session);
-			/*for(Camion camion: camionInDataBase){
-				int randomCaserne = new Random().nextInt(5) +1;
-				camion.setCaserne(caserneInDataBase.get(randomCaserne));
+
+			List<CamionCaserne> camionCasernes = new ArrayList<>();
+			for(Camion camion: camionInDataBase) {
+				int randomCaserne = new Random().nextInt(caserneInDataBase.size());
+				List<Camion> camions =new ArrayList<>();
+				camions.add(camion);
+				CamionCaserne camionCaserne = new CamionCaserne(caserneInDataBase.get(randomCaserne),camions);
+				camionCasernes.add(camionCaserne);
 			}
-*/
 			fireController.setSensors(capteurInDataBase);
 			ViewController viewController = new ViewController(null, capteurInDataBase);
 			fireController.setViewController(viewController);
@@ -65,7 +69,18 @@ public class EmergencyMain {
 			Thread thread = new Thread(){
 				public void run(){
 					System.out.println("Thread Interventions Running");
-					fireController.camionManagement();
+					try {
+						while(true){
+
+							JSONObject jsonObject = fireController.camionManagement();
+
+							//Server requests update
+							getCamion.setSensorsList(jsonObject.toString());
+							Thread.sleep(5000);
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			};
 			thread.start();
@@ -81,7 +96,7 @@ public class EmergencyMain {
 					Capteur capteur = new Capteur(Integer.valueOf(id.get(0)), Integer.valueOf(intensity.get(0)));
 					System.out.println("Capteur : "+ capteur);
 					capteurs.add(capteur);
-					fireController.gatherCapteurToCreateFire(fireController, getCamion, getFire, capteurs, fire, camions);
+					fireController.gatherCapteurToCreateFire(fireController, getFire, capteurs, fire, camionCasernes);
 				}
 			});
 

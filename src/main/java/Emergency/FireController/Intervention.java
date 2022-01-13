@@ -26,17 +26,6 @@ public class Intervention {
 	@Column(name = "dateFin")
 	private LocalDate dateFin;
 
-/*	@OneToMany(targetEntity=Camion.class, mappedBy= "intervention", fetch=FetchType.EAGER)
-	private List<Camion> camion;
-
-	public List<Camion> getCamion() {
-		return camion;
-	}
-
-	public void setCamion(List<Camion> camion) {
-		this.camion = camion;
-	}
-*/
 	public Intervention() {
 	}
 

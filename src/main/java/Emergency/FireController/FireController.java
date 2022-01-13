@@ -19,7 +19,8 @@ public class FireController {
 	private int maxIntensity = 9;
 	private List<Camion> camions;
 	private List<Caserne> casernes;
-	private List<Intervention> interventions;
+	private List<InterventionTampon> interventions;
+	private JSONObject jsonObject;
 
 	public List<Caserne> getCasernes() {
 		return casernes;
@@ -146,55 +147,87 @@ public class FireController {
 		return sensors;
 	}
 
-	public Fire processFire(List<Capteur> capteurs){
+	public Fire processFire(List<Capteur> capteurs, List<CamionCaserne> camionCasernes){
 		List<Capteur> sensorsList = attributeNewIntensity(capteurs);
 		Fire fire = calculatePositionFire(sensorsList);
 		addFire(fire);
 		Intervention intervention =  new Intervention(interventions.size()+1, fire,new Date().toInstant());
-		interventions.add(intervention);
+		CamionCaserne camionCaserneNeuf = null;
+		int i =0;
+		for(CamionCaserne camionCaserne : camionCasernes) {
+			Map<Camion, Boolean> map = camionCaserne.getMapCamionBool();
+			for(Camion camion : map.keySet()) {
+				if(!map.get(camion)) {
+					camionCaserneNeuf = camionCaserne;
+					map.replace(camion, false, true);
+					i = 1;
+					break;
+				}
+			}
+			if(i!=0){
+				break;
+			}
+		}
+		camions.clear();
+		for(CamionCaserne camionCaserne : camionCasernes) {
+			Map<Camion, Boolean> map = camionCaserne.getMapCamionBool();
+			camions.addAll(map.keySet());
+		}
+
+		InterventionTampon interventionTampon = new InterventionTampon(camionCaserneNeuf,intervention);
+		interventions.add(interventionTampon);
 		System.out.println("Intervention :" + interventions + "\n");
 		return  fire;
 
 	}
 
-	public void camionManagement(){
-		while(true){
-			for(Intervention intervention: interventions){
-			//	deplaceCamion(intervention.getCamion(), intervention.getIdFeu());
+	public JSONObject camionManagement() {
+			for(InterventionTampon intervention: interventions){
+				deplaceCamion(intervention, intervention.getCamionCaserne().getCamions());
 			}
-		}
+			//Building JSON
+			return JSonUtils.buildJSonCamions(camions);
 
 	}
 
-	public void deplaceCamion(List<Camion> camions, Fire fire){
+	public void deplaceCamion(InterventionTampon interventionTampon, List<Camion> camions){
 		for(Camion camion: camions){
-			//trajectoire(camion.getCaserne(),fire,camion);
+			this.camions.remove(camion);
+			this.camions.add(trajectoire(interventionTampon.getCamionCaserne().getCaserne(), interventionTampon.getIntervention().getIdFeu(), camion));
 		}
+
 	}
 
-	public void trajectoire(Caserne caserne, Fire fire, Camion camion){
-		double X = camion.getPositionXCamion() +(Math.sqrt(Math.pow((fire.getPositionXFeu() - caserne.getPositionXCaserne()), 2)/Math.pow((fire.getPositionYFeu() - caserne.getPositionYCaserne()), 2)))/10;
-		double Y = X*(fire.getPositionXFeu() -caserne.getPositionXCaserne())/(fire.getPositionYFeu() - caserne.getPositionYCaserne())+fire.getPositionXFeu();
+	public Camion trajectoire(Caserne caserne, Fire fire, Camion camion){
+		double X = 0;
+		double Y = 0;
+
+		double distanceX = (fire.getPositionYFeu() - caserne.getPositionXCaserne())/5;
+		double distanceY = (fire.getPositionXFeu() - caserne.getPositionYCaserne())/5;
+		if(camion.getPositionXCamion() == null){
+			 X = caserne.getPositionXCaserne() + distanceX;
+			 Y = caserne.getPositionYCaserne() + distanceY;
+		}else
+		 if(!Objects.equals(camion.getPositionXCamion(), fire.getPositionYFeu()) || !Objects.equals(camion.getPositionXCamion(), caserne.getPositionXCaserne()) ){
+			 Y = camion.getPositionYCamion() + distanceY;
+			 X = camion.getPositionXCamion() + distanceX;
+		}else{
+			 Y = 0;
+			 X = 0;
+		 }
 		camion.setPositionXCamion(X);
 		camion.setPositionYCamion(Y);
+		System.out.println("Camion " + camion);
+		return  camion;
 	}
-	public void gatherCapteurToCreateFire(FireController fireController, getCamion getCamion, getFire getFire, List<Capteur> capteurs, Fire[] fire, List<Camion> camions) {
+	public void gatherCapteurToCreateFire(FireController fireController, getFire getFire, List<Capteur> capteurs, Fire[] fire, List<CamionCaserne> camionCasernes) {
 		if(capteurs.size()==4) {
-			fire[0] = fireController.processFire(capteurs);
+			fire[0] = fireController.processFire(capteurs, camionCasernes);
 
 			JSONObject fireString = JSonUtils.buildJSonFire(fire[0]);
 			System.out.println("Fiiiire " + fireString);
 			getFire.setFire(fireString.toString());
 
-
-			camions.get(1).setPositionXCamion(fire[0].getPositionXFeu()+0.02);
-			camions.get(1).setPositionYCamion(fire[0].getPositionYFeu()+0.05);
-
-			//Building JSON
-			JSONObject jsonObject = JSonUtils.buildJSonCamions(camions);
-
-			//Server requests update
-			getCamion.setSensorsList(jsonObject.toString());
 			capteurs.clear();
 		}
 	}
