@@ -55,7 +55,7 @@ public class JSonUtils {
 			sensorJSon.put("positionX", sensor.getPositionXCamion());
 			sensorJSon.put("positionY", sensor.getPositionYCamion());
 			sensorJSon.put("type", sensor.getTypeCamion());
-			jsonObject.append("camions", sensorJSon);
+			jsonObject.append("camion", sensorJSon);
 		}
 		return jsonObject ;
 	}
