@@ -25,6 +25,12 @@ public class Intervention {
 	@Column(name = "dateFin")
 	private LocalDate dateFin;
 
+	public Intervention(Integer id, Fire idFeu, Instant heureArrivee) {
+		this.id = id;
+		this.idFeu = idFeu;
+		this.heureArrivee = heureArrivee;
+	}
+
 	public LocalDate getDateFin() {
 		return dateFin;
 	}
@@ -63,5 +69,10 @@ public class Intervention {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Intervention{" + "id=" + id + ", idFeu=" + idFeu + ", heureArrivee=" + heureArrivee + ", heureFin=" + heureFin + ", dateFin=" + dateFin + '}';
 	}
 }

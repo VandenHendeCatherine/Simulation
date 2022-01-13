@@ -1,7 +1,9 @@
 package Emergency.FireController;
 
 import Emergency.View.ViewController;
+import com.sun.xml.fastinfoset.tools.FI_SAX_Or_XML_SAX_SAXEvent;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,7 @@ public class FireController {
 	private int maxIntensity = 9;
 	private List<Camion> camions;
 	private List<Caserne> casernes;
+	private List<Intervention> interventions;
 
 	public List<Caserne> getCasernes() {
 		return casernes;
@@ -43,10 +46,18 @@ public class FireController {
 
 	public FireController(){
 
+		interventions = new ArrayList<>();
+		camions = new ArrayList<>();
+		casernes = new ArrayList<>();
+		fires =new ArrayList<>();
+
 	}
 	public FireController(List<Capteur> sensors, ViewController viewController){
 		this.sensors = sensors;
 		this.viewController = viewController;
+		interventions = new ArrayList<>();
+		camions = new ArrayList<>();
+		casernes = new ArrayList<>();
 	}
 
 
@@ -138,9 +149,13 @@ public class FireController {
 		List<Capteur> sensorsList = attributeNewIntensity(capteurs);
 		Fire fire = calculatePositionFire(sensorsList);
 		addFire(fire);
+		Intervention intervention =  new Intervention(interventions.size()+1, fire,new Date().toInstant());
+		interventions.add(intervention);
+		System.out.println("Intervention :" + interventions + "\n");
 		return  fire;
 
 	}
+
 
 	/**
 	 *

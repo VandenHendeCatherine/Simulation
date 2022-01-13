@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class EmergencyMain { ;
+public class EmergencyMain {
 
 	public static void main(String[] args) throws IOException, MqttException {
 		SessionFactory sessionFactory = getSessionFactory();
@@ -34,7 +34,6 @@ public class EmergencyMain { ;
 			fireController.setViewController(viewController);
 			fireController.setCamions(camionInDataBase);
 			fireController.setCasernes(caserneInDataBase);
-			fireController.setFires(new ArrayList<>());
 
 			//MQTT Broker connection
 			final String serverUrl   = "tcp://164.4.3.201:1883";
@@ -55,51 +54,50 @@ public class EmergencyMain { ;
 			// listen for operations
 
 			List<Capteur> capteurs = new ArrayList<>();
+			Fire[] fire = { new Fire() };
+			List<Camion> camions = new ArrayList<>(fireController.getCamions());
 			client.subscribe("python/capteur_data", new IMqttMessageListener() {
 				public void messageArrived (final String topic, final MqttMessage message) throws Exception {
 					final String payload = new String(message.getPayload());
-					Fire[] fire = { new Fire() };
-					List<Camion> camions = new ArrayList<>(fireController.getCamions());
 					System.out.println("Received capteur " + payload);
 					List<String> id = List.of(payload.split(" "));
 					List<String> intensity = List.of(id.get(1).split("="));
-					Capteur capteur = new Capteur(Integer.valueOf(id.get(0)), Integer.valueOf(intensity.get(1)));
+					intensity = List.of(intensity.get(1).split("\r"));
+					System.out.println("id : "+id);
+					Capteur capteur = new Capteur(Integer.valueOf(id.get(0)), Integer.valueOf(intensity.get(0)));
+					System.out.println("Capteur : "+ capteur);
 					capteurs.add(capteur);
-					if(capteurs.size()==4) {
-						fire[0] = fireController.processFire(capteurs);
-
-						JSONObject fireString = JSonUtils.buildJSonFire(fire[0]);
-						System.out.println("Fiiiire " + fireString.toString());
-						getFire.setFire(fireString.toString());
-
-						int i =0;
-						for(Camion camion : camions){
-							camion.setPositionXCamion(fire[i].getPositionXFeu()+0.02);
-							camion.setPositionYCamion(fire[i].getPositionYFeu()+0.05);
-							i++;
-						}
-						//Building JSON
-						JSONObject jsonObject = JSonUtils.buildJSonCamions((List<Camion>) camions.get(0));
-						JSONObject jsonObjectFire = JSonUtils.buildJSonFire(fire[0]);
-
-						//Server requests update
-						getCamion.setSensorsList(jsonObject.toString());
-						getFire.setFire(jsonObjectFire.toString());
-
-						capteurs.clear();
-					}
-
-					server.createContext("/getFeux", getFire);
-					server.createContext("/getCamions", getCamion);
-
+					gatherCapteurToCreateFire(fireController, getCamion, getFire, capteurs, fire, camions);
 				}
 			});
 
+			server.createContext("/getFeux", getFire);
+			server.createContext("/getCamions", getCamion);
 			}
 
-		//session.save(capteurInDataBase);
 			sessionFactory.close();
 
+	}
+
+	private static void gatherCapteurToCreateFire(FireController fireController, getCamion getCamion, getFire getFire, List<Capteur> capteurs, Fire[] fire, List<Camion> camions) {
+		if(capteurs.size()==4) {
+			fire[0] = fireController.processFire(capteurs);
+
+			JSONObject fireString = JSonUtils.buildJSonFire(fire[0]);
+			System.out.println("Fiiiire " + fireString);
+			getFire.setFire(fireString.toString());
+
+
+				camions.get(1).setPositionXCamion(fire[0].getPositionXFeu()+0.02);
+				camions.get(1).setPositionYCamion(fire[0].getPositionYFeu()+0.05);
+
+			//Building JSON
+			JSONObject jsonObject = JSonUtils.buildJSonCamions(camions);
+
+			//Server requests update
+			getCamion.setSensorsList(jsonObject.toString());
+			capteurs.clear();
+		}
 	}
 
 	//Hibernate configuration
