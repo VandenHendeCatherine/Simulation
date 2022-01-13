@@ -1,4 +1,4 @@
-package Simulation.View;
+package Emergency.View;
 
 import Emergency.FireController.Camion;
 import Emergency.FireController.Capteur;

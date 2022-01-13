@@ -1,5 +1,5 @@
 
-package Simulation.View;
+package Emergency.View;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
