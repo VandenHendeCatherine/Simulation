@@ -72,7 +72,6 @@ public class Emergency {
 					System.out.println("Capteur : "+ capteur);
 					capteurs.add(capteur);
 					gatherCapteurToCreateFire(fireController, getCamion, getFire, capteurs, fire, camions);
-
 				}
 			});
 
